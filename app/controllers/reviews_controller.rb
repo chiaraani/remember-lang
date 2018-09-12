@@ -1,12 +1,16 @@
 class ReviewsController < ApplicationController
   def index
-    @reviews = Review.where("expires_at <= ?", Date.today)
+    @reviews = Review.pending
   end
 
   def create
     @word = Word.find(params[:word_id])
     @review = @word.reviews.create(review_params)
     redirect_to @word
+  end
+
+  def attempt
+    @review = Review.pending.first
   end
 
   private

@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root 'reviews#index'
 
+  get 'review' => 'reviews#attempt', as: 'review'
+
   resources :words do
     resources :reviews, only: :create
   end
