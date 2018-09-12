@@ -7,12 +7,12 @@
 
 <%= link_to 'Edit', edit_word_path(@word) %>
 
-<h2>New Review</h2>
+<h2>Add a Review</h2>
 
 <%= form_with(model: [@word, @word.reviews.build ], local: true) do |form| %>
 <p>
   <%= form.label :expires_at %>
-  <%= form.date_field :expires_at %>
+  <%= form.date_field :expires_at, value: Date.today %>
 </p>
 <p>
   <%= form.submit %>

@@ -30,6 +30,10 @@ a {
     color: #fff;
     background-color: #000;
   }
+
+  &:active {
+    background-color: gray;
+  }
 }
 
 th {
