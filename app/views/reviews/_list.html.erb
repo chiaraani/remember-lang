@@ -1,0 +1,26 @@
+<h2>Reviews</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Created at</th>
+      <th>Expires at</th>
+      <th>Word</th>
+      <th>Done at</th>
+      <th>Passed</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% reviews.each do |review| %>
+      <tr>
+        <td><%= review.created_at %></td>
+        <td><%= review.expires_at %></td>
+        <td><%= review.word.spelling %></td>
+        <td><%= review.done_at %></td>
+        <td><%= review.passed %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

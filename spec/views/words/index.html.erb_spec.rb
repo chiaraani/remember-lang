@@ -7,13 +7,14 @@ RSpec.describe "words/index", type: :view do
         :spelling => "Spelling"
       ),
       Word.create!(
-        :spelling => "Spelling"
+        :spelling => "Hello"
       )
     ])
   end
 
   it "renders a list of words" do
     render
-    assert_select "tr>td", :text => "Spelling".to_s, :count => 2
+    assert_select "tr>td", :text => "Spelling".to_s
+    assert_select "tr>td", :text => "Hello".to_s
   end
 end

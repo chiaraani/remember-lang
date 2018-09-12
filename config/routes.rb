@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'reviews#index'
+
   resources :words do
     resources :reviews, only: :create
   end

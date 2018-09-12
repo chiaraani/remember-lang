@@ -10,6 +10,12 @@
   </head>
 
   <body>
+    <nav>
+      <ul>
+        <li><%= link_to "Today's Reviews", root_path %></li>
+        <li><%= link_to 'Words', words_path %></li>
+      </ul>
+    </nav>
     <%= yield %>
   </body>
 </html>

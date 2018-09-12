@@ -13,18 +13,19 @@
 ActiveRecord::Schema.define(version: 2018_08_10_181056) do
 
   create_table "reviews", force: :cascade do |t|
-    t.datetime "expires_at"
+    t.date "expires_at", null: false
     t.boolean "passed"
-    t.integer "word_id"
+    t.integer "word_id", null: false
+    t.datetime "done_at"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["word_id"], name: "index_reviews_on_word_id"
   end
 
   create_table "words", force: :cascade do |t|
-    t.string "spelling"
+    t.string "spelling", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["spelling"], name: "index_words_on_spelling", unique: true
   end
 
 end

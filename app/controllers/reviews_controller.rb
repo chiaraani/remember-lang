@@ -1,4 +1,8 @@
 class ReviewsController < ApplicationController
+  def index
+    @reviews = Review.where("expires_at <= ?", Date.today)
+  end
+
   def create
     @word = Word.find(params[:word_id])
     @review = @word.reviews.create(review_params)

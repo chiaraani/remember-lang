@@ -5,8 +5,7 @@
   <%= @word.spelling %>
 </p>
 
-<%= link_to 'Edit', edit_word_path(@word) %> |
-<%= link_to 'Back', words_path %>
+<%= link_to 'Edit', edit_word_path(@word) %>
 
 <h2>New Review</h2>
 
@@ -20,27 +19,4 @@
 </p>
 <% end %>
 
-<h2>Reviews</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>Created at</th>
-      <th>Expires at</th>
-      <th>Done at</th>
-      <th>Passed</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @word.reviews.each do |review| %>
-      <tr>
-        <td><%= review.created_at %></td>
-        <td><%= review.expires_at %></td>
-        <td><%= review.updated_at %></td>
-        <td><%= review.passed %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render partial: "reviews/list", locals: {reviews: @word.reload.reviews} %>
