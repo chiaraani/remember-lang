@@ -18,4 +18,14 @@ RSpec.describe "words/show", type: :view do
     assert_select "tr>td", :text => "2017-03-27"
     assert_select "tr>td", :text => "2017-07-19"
   end
+
+  it "renders new review form" do
+    render
+
+    assert_select "form[action=?][method=?]", word_reviews_path(@word), "post" do
+
+      assert_select "input[name=?]", "review[expires_at]"
+      assert_select "input[value=?]", (Date.today + 1).to_s
+    end
+  end
 end
