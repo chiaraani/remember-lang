@@ -1,6 +1,6 @@
 class Review < ApplicationRecord
-  validates :expires_at, presence: true
+  validates :scheduled_for, presence: true
   belongs_to :word
-  scope :pending, -> { where("expires_at <= ?", Date.today).notdone }
+  scope :pending, -> { where("scheduled_for <= ?", Date.today).notdone }
   scope :notdone, -> { where(done_at: nil) }
 end

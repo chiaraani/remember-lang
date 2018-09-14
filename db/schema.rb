@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 2018_08_10_181056) do
 
   create_table "reviews", force: :cascade do |t|
-    t.date "expires_at", null: false
+    t.date "scheduled_for", null: false
     t.boolean "passed"
     t.integer "word_id", null: false
     t.datetime "done_at"

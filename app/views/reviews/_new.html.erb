@@ -1,0 +1,11 @@
+<h2>Add a Review</h2>
+
+<%= form_with(model: [word, word.reviews.build ], local: true) do |form| %>
+<p>
+  <%= form.label :expires_at %>
+  <%= form.date_field :expires_at, value: Date.today + 1 %>
+</p>
+<p>
+  <%= form.submit %>
+</p>
+<% end %>

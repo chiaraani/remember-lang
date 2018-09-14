@@ -6,7 +6,7 @@ RSpec.describe ReviewsController, type: :controller do
   }
 
   let(:valid_attributes) {
-    {expires_at: Date.new}
+    {scheduled_for: Date.tomorrow}
   }
 
   let(:valid_session) { {} }

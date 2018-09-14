@@ -14,7 +14,7 @@ RSpec.describe Word, type: :model do
 
   describe 'reviews' do
     it 'is dependent' do
-      word.reviews.create!(expires_at: Date.new(2018))
+      word.reviews.create!(scheduled_for: Date.new(2018))
       Word.first.destroy
       expect(Review.all.count).to eql(0)
     end

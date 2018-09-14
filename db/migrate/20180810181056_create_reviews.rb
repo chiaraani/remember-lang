@@ -1,7 +1,7 @@
 class CreateReviews < ActiveRecord::Migration[5.2]
   def change
     create_table :reviews do |t|
-      t.date :expires_at, null: false
+      t.date :scheduled_for, null: false
       t.boolean :passed
       t.belongs_to :word, foreign_key: true, null: false
       t.datetime :done_at

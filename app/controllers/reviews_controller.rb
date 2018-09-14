@@ -15,6 +15,6 @@ class ReviewsController < ApplicationController
 
   private
     def review_params
-      params.require(:review).permit(:expires_at)
+      params.require(:review).permit(:scheduled_for)
     end
 end
