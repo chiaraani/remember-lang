@@ -21,4 +21,12 @@ RSpec.describe Review, type: :model do
     expect(Review.pending.count).to eql(1)
     expect(Review.pending.ids).to match [pending_review.id]
   end
+
+  describe 'meantime' do
+    it do
+      review = Review.create!(scheduled_for: Date.today + 10,
+                   word: Word.create!(spelling: 'hello'))
+      expect(review.meantime).to eql(10)
+    end
+  end
 end
