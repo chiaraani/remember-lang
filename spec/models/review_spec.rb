@@ -17,7 +17,7 @@ RSpec.describe Review, type: :model do
   it 'has a pending group' do
     pending_review = review
     Word.first.reviews.create!(scheduled_for: Date.tomorrow)
-    Word.first.reviews.create!(scheduled_for: Date.new(2017), done_at: Date.today, passed: true)
+    Word.first.reviews.create!(scheduled_for: Date.new(2017), made_at: Date.today, passed: true)
     expect(Review.pending.count).to eql(1)
     expect(Review.pending.ids).to match [pending_review.id]
   end

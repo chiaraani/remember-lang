@@ -5,7 +5,7 @@ RSpec.describe "words/show", type: :view do
     @word = assign(:word, Word.create!(
       :spelling => "Spelling"
     ))
-    @word.reviews.create!(scheduled_for: Date.new(2017, 3, 27), done_at: DateTime.now, passed: true)
+    @word.reviews.create!(scheduled_for: Date.new(2017, 3, 27), made_at: DateTime.now, passed: true)
     @word.reviews.create!(scheduled_for: Date.new(2017, 7, 19))
     render
   end
