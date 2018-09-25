@@ -4,7 +4,7 @@ RSpec.describe Review, type: :model do
   let(:word) { Word.create!(spelling: 'hello') }
   let(:review) { Review.create!(scheduled_for: 10.days.from_now, word: word) }
   let(:pending_review) { Review.create!(created_at: 1.week.ago, scheduled_for: 1.day.ago, word: word) }
-  let(:made_review) { Review.create!(created_at: 1.week.ago, scheduled_for: 3.days.ago, word: word, made_at: Date.today, passed: true) }
+  let(:made_review) { Review.create!(created_at: 1.week.ago, scheduled_for: 3.days.ago, word: word, made_at: DateTime.now, passed: true) }
 
   it 'belongs to a word' do
     expect(review.word).to be_a Word
@@ -30,11 +30,19 @@ RSpec.describe Review, type: :model do
       it { expect(made_review.meantime).to eql(7) }
     end
   end
-=begin
-  describe 'previous'
+  describe 'previous' do
     context 'There is a previous review' do
-      before do
-        made_review
-        review
-=end
+      it do
+        previous = made_review
+        expect(review.previous).to match previous
+      end
+    end
+    context 'There is no previous review' do
+      it 'return a new review' do
+        expect(review.previous.created_at.to_date).to match 5.days.ago.to_date
+        expect(review.previous.word).to match word
+        expect(review.previous.made_at.to_date).to match review.created_at.to_date
+      end
+    end
+  end
 end
