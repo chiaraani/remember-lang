@@ -18,11 +18,17 @@ class ReviewsController < ApplicationController
   end
 
   def make
-    @review = Review.pending.first
+    if Review.pending.count > 0
+      @review = Review.pending.first
+    else
+      respond_to do |format|
+        format.html { redirect_to root_path, notice: 'There are no pending reviews.' }
+      end
+    end
   end
 
   private
-    def review_params
-      params.require(:review).permit(:scheduled_for)
-    end
+  def review_params
+    params.require(:review).permit(:scheduled_for)
+  end
 end

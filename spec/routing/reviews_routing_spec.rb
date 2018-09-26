@@ -9,5 +9,9 @@ RSpec.describe ReviewsController, type: :routing do
     it "routes to #create" do
       expect(:post => "/words/1/reviews").to route_to("reviews#create", :word_id => '1')
     end
+
+    it "routes to #make" do
+      expect(:get => "reviews/make").to route_to("reviews#make")
+    end
   end
 end

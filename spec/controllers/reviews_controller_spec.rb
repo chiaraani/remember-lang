@@ -36,10 +36,22 @@ RSpec.describe ReviewsController, type: :controller do
       end
     end
   end
-=begin
   describe "GET #make" do
+    let(:route) { get :make, params: {}, session: valid_session }
+
     context "when pending reviews" do
-      before { create_list(:pending_review, 2) }
-      it 'returns a success response
-=end
+      it 'returns a success response' do
+        create(:pending_review)
+        route
+        expect(response).to be_successful
+      end
+    end
+
+    context "when no pending reviews" do
+      it 'redirects to root' do
+        route
+        expect(response).to redirect_to(root_path)
+      end
+    end
+  end
 end
