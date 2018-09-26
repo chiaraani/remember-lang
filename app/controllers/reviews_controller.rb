@@ -17,7 +17,7 @@ class ReviewsController < ApplicationController
     end
   end
 
-  def attempt
+  def make
     @review = Review.pending.first
   end
 

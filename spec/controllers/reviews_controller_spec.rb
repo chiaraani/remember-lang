@@ -4,10 +4,6 @@ RSpec.describe ReviewsController, type: :controller do
   let(:word) {
     create(:word)
   }
-
-  let(:valid_attributes) {
-    attributes_for(:review)
-  }
   let(:invalid_attributes) {
     {scheduled_for: nil, made_at: 1.day.ago}
   }
@@ -15,15 +11,19 @@ RSpec.describe ReviewsController, type: :controller do
   let(:valid_session) { {} }
 
   describe "POST #create" do
+
     context "with valid params" do
+      def route
+        post :create,
+        params: {word_id: word.id, review: attributes_for(:review)},
+        session: valid_session
+      end
       it "creates a new review" do
-        expect {
-          post :create, params: {word_id: word.id, review: valid_attributes}, session: valid_session
-        }.to change(Review, :count).by(1)
+        expect {route}.to change(Review, :count).by(1)
       end
 
       it "redirects to the created review's word" do
-        post :create, params: {word_id: word.id, review: valid_attributes}, session: valid_session
+        route
         expect(response).to redirect_to(word)
       end
     end
@@ -36,4 +36,10 @@ RSpec.describe ReviewsController, type: :controller do
       end
     end
   end
+=begin
+  describe "GET #make" do
+    context "when pending reviews" do
+      before { create_list(:pending_review, 2) }
+      it 'returns a success response
+=end
 end

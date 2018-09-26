@@ -31,14 +31,14 @@ RSpec.describe Review, type: :model do
     end
   end
   describe 'previous' do
-    context 'There is a previous review' do
+    context 'finds a previous review' do
       it do
         previous = made_review
         expect(review.previous).to match previous
       end
     end
-    context 'There is no previous review' do
-      it 'return a new review' do
+    context 'when no previous review' do
+      it 'returns a new review' do
         expect(review.previous.created_at.to_date).to match 5.days.ago.to_date
         expect(review.previous.word).to match word
         expect(review.previous.made_at.to_date).to match review.created_at.to_date

@@ -24,13 +24,10 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe WordsController, type: :controller do
+ let(:word) { create(:word) }
 
-  # This should return the minimal set of attributes required to create a valid
-  # Word. As you add validations to Word, be sure to
+  # As you add validations to Word, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    attributes_for(:word)
-  }
 
   let(:invalid_attributes) {
     {spelling: ''}
@@ -43,7 +40,7 @@ RSpec.describe WordsController, type: :controller do
 
   describe "GET #index" do
     it "returns a success response" do
-      Word.create! valid_attributes
+      word
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
     end
@@ -51,7 +48,6 @@ RSpec.describe WordsController, type: :controller do
 
   describe "GET #show" do
     it "returns a success response" do
-      word = Word.create! valid_attributes
       get :show, params: {id: word.to_param}, session: valid_session
       expect(response).to be_successful
     end
@@ -66,7 +62,6 @@ RSpec.describe WordsController, type: :controller do
 
   describe "GET #edit" do
     it "returns a success response" do
-      word = Word.create! valid_attributes
       get :edit, params: {id: word.to_param}, session: valid_session
       expect(response).to be_successful
     end
@@ -74,14 +69,17 @@ RSpec.describe WordsController, type: :controller do
 
   describe "POST #create" do
     context "with valid params" do
+      def route
+        post :create,
+          params: {word: attributes_for(:word)},
+          session: valid_session
+      end
       it "creates a new Word" do
-        expect {
-          post :create, params: {word: valid_attributes}, session: valid_session
-        }.to change(Word, :count).by(1)
+        expect { route }.to change(Word, :count).by(1)
       end
 
       it "redirects to the created word" do
-        post :create, params: {word: valid_attributes}, session: valid_session
+        route
         expect(response).to redirect_to(Word.last)
       end
     end
@@ -97,44 +95,39 @@ RSpec.describe WordsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        {spelling: 'oyster'}
-      }
+      let(:new_attributes) { {spelling: 'oyster'} }
+      before do
+        put :update, params: {id: word.to_param, word: new_attributes}, session: valid_session
+      end
 
       it "updates the requested word" do
-        word = Word.create! valid_attributes
-        put :update, params: {id: word.to_param, word: new_attributes}, session: valid_session
         word.reload
         expect(word.spelling).to match('oyster')
       end
 
-      it "redirects to the word" do
-        word = Word.create! valid_attributes
-        put :update, params: {id: word.to_param, word: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(word)
-      end
+      it("redirects to the word") { expect(response).to redirect_to(word) }
     end
 
     context "with invalid params" do
       it "returns a success response (i.e. to display the 'edit' template)" do
-        word = Word.create! valid_attributes
         put :update, params: {id: word.to_param, word: invalid_attributes}, session: valid_session
         expect(response).to be_successful
+        expect(response).to render_template('words/edit')
       end
     end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested word" do
-      word = Word.create! valid_attributes
-      expect {
+    def route
         delete :destroy, params: {id: word.to_param}, session: valid_session
-      }.to change(Word, :count).by(-1)
+    end
+    it "destroys the requested word" do
+      word
+      expect { route }.to change(Word, :count).by(-1)
     end
 
     it "redirects to the words list" do
-      word = Word.create! valid_attributes
-      delete :destroy, params: {id: word.to_param}, session: valid_session
+      route
       expect(response).to redirect_to(words_url)
     end
   end
