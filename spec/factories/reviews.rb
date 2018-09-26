@@ -10,11 +10,11 @@ FactoryBot.define do
     scheduled_for { 3.days.ago }
   end
 
-  factory :done_review, class: Review do
+  factory :made_review, class: Review do
     word
     created_at { 1.week.ago }
     scheduled_for { 3.days.ago }
-    done_at { Date.today }
+    made_at { Date.today }
     passed { true }
   end
 end

@@ -17,7 +17,7 @@ class ReviewsController < ApplicationController
     end
   end
 
-  def do
+  def make
     if Review.pending.count > 0
       @review = Review.pending.first
     else

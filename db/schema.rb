@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2018_08_10_181056) do
     t.date "scheduled_for", null: false
     t.boolean "passed"
     t.integer "word_id", null: false
-    t.datetime "done_at"
+    t.datetime "made_at"
     t.datetime "created_at", null: false
     t.index ["word_id"], name: "index_reviews_on_word_id"
   end

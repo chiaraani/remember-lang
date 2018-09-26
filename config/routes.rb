@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'reviews#index'
 
-  get 'reviews/do'
+  get 'reviews/make'
 
   resources :words do
     resources :reviews, only: :create

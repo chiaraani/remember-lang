@@ -37,8 +37,8 @@ RSpec.describe ReviewsController, type: :controller do
     end
   end
 
-  describe "GET #do" do
-    let(:route) { get :do, params: {}, session: valid_session }
+  describe "GET #make" do
+    let(:route) { get :make, params: {}, session: valid_session }
 
     context "when pending reviews" do
       it 'returns a success response' do
