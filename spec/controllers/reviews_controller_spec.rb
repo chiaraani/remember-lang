@@ -13,7 +13,7 @@ RSpec.describe ReviewsController, type: :controller do
   describe "POST #create" do
 
     context "with valid params" do
-      def route
+      let :route do
         post :create,
         params: {word_id: word.id, review: attributes_for(:review)},
         session: valid_session
@@ -36,6 +36,7 @@ RSpec.describe ReviewsController, type: :controller do
       end
     end
   end
+
   describe "GET #make" do
     let(:route) { get :make, params: {}, session: valid_session }
 

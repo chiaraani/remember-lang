@@ -69,7 +69,7 @@ RSpec.describe WordsController, type: :controller do
 
   describe "POST #create" do
     context "with valid params" do
-      def route
+      let :route do
         post :create,
           params: {word: attributes_for(:word)},
           session: valid_session
@@ -118,9 +118,7 @@ RSpec.describe WordsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    def route
-        delete :destroy, params: {id: word.to_param}, session: valid_session
-    end
+    let(:route) { delete :destroy, params: {id: word.to_param}, session: valid_session }
     it "destroys the requested word" do
       word
       expect { route }.to change(Word, :count).by(-1)
