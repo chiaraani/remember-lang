@@ -5,8 +5,16 @@ class ReviewsController < ApplicationController
 
   def create
     @word = Word.find(params[:word_id])
-    @review = @word.reviews.create(review_params)
-    redirect_to @word
+    @review = @word.reviews.new(review_params)
+
+    respond_to do |format|
+      if @review.save
+        format.html { redirect_to @word, notice: 'Review was successfully created.' }
+      else
+        format.html { render 'words/show' }
+        format.json { render json: @review.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def attempt

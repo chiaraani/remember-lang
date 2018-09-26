@@ -2,14 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "words/index", type: :view do
   before(:each) do
-    assign(:words, [
-      Word.create!(
-        :spelling => "Spelling"
-      ),
-      Word.create!(
-        :spelling => "Hello"
-      )
-    ])
+    assign(:words, [create(:word, spelling: 'Spelling'), create(:word, spelling: 'Hello')])
   end
 
   it "renders a list of words" do

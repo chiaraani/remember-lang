@@ -29,7 +29,7 @@ RSpec.describe WordsController, type: :controller do
   # Word. As you add validations to Word, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    {spelling: 'clam'}
+    attributes_for(:word)
   }
 
   let(:invalid_attributes) {
@@ -90,6 +90,7 @@ RSpec.describe WordsController, type: :controller do
       it "returns a success response (i.e. to display the 'new' template)" do
         post :create, params: {word: invalid_attributes}, session: valid_session
         expect(response).to be_successful
+        expect(response).to render_template('words/new')
       end
     end
   end

@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Word, type: :model do
-  let(:word) { Word.create!(spelling: 'hello') }
+  let(:word) { create(:word) }
   describe 'spelling' do
     it 'must be present' do
       expect(Word.create(spelling: nil).errors.messages.count).to eql(1)
     end
     it 'must be unique' do
-      word
+      create(:word, spelling: 'hello')
       expect(Word.create(spelling: 'hello').errors.messages.count).to eql(1)
     end
   end

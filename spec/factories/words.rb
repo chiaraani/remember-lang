@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :word do
-    spelling { "hello" }
+    spelling { Forgery(:basic).color }
   end
 end

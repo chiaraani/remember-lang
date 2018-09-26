@@ -44,6 +44,8 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rspec'
   gem 'rails-controller-testing'
+  gem "factory_bot_rails"
+  gem 'forgery'
 end
 
 group :development do

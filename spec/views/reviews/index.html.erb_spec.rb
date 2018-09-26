@@ -3,14 +3,8 @@ require 'rails_helper'
 RSpec.describe "reviews/index", type: :view do
   before(:each) do
     assign(:reviews, [
-      Review.create!(
-        :scheduled_for => Date.new(2018),
-        :word => Word.create!(spelling: 'hello')
-      ),
-      Review.create!(
-        :scheduled_for => Date.new(2010),
-        :word => Word.first
-      )
+      create(:review, scheduled_for: Date.new(2018)),
+      create(:review, scheduled_for: Date.new(2010))
     ])
   end
 

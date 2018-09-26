@@ -10,6 +10,7 @@ class WordsController < ApplicationController
   # GET /words/1
   # GET /words/1.json
   def show
+    @review = @word.reviews.new
   end
 
   # GET /words/new

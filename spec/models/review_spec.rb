@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Review, type: :model do
-  let(:word) { Word.create!(spelling: 'hello') }
-  let(:review) { Review.create!(scheduled_for: 10.days.from_now, word: word) }
-  let(:pending_review) { Review.create!(created_at: 1.week.ago, scheduled_for: 1.day.ago, word: word) }
-  let(:made_review) { Review.create!(created_at: 1.week.ago, scheduled_for: 3.days.ago, word: word, made_at: DateTime.now, passed: true) }
+  let(:word) { create(:word) }
+  let(:review) { create(:review, word: word) }
+  let(:pending_review) { create(:pending_review, word: word) }
+  let(:made_review) { create(:made_review, word: word) }
 
   it 'belongs to a word' do
     expect(review.word).to be_a Word

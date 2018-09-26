@@ -1,11 +1,23 @@
 <h2>Add a Review</h2>
 
-<%= form_with(model: [word, word.reviews.build ], local: true) do |form| %>
-<p>
-  <%= form.label :expires_at %>
-  <%= form.date_field :expires_at, value: Date.today + 1 %>
-</p>
-<p>
-  <%= form.submit %>
-</p>
+<%= form_with(model: @review, url: word_reviews_path(@word), local: true) do |form| %>
+  <% if @review and @review.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@review.errors.count, "error") %> prohibited this word from being saved:</h2>
+
+      <ul>
+        <% @review.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :scheduled_for %>
+    <%= form.date_field :scheduled_for, value: Date.tomorrow %>
+  </div>
+  <div class="actions">
+    <%= form.submit %>
+  </div>
 <% end %>
