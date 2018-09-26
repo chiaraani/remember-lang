@@ -5,7 +5,7 @@ RSpec.describe ReviewsController, type: :controller do
     create(:word)
   }
   let(:invalid_attributes) {
-    {scheduled_for: nil, made_at: 1.day.ago}
+    {scheduled_for: nil, performed_at: 1.day.ago}
   }
 
   let(:valid_session) { {} }
@@ -37,8 +37,8 @@ RSpec.describe ReviewsController, type: :controller do
     end
   end
 
-  describe "GET #make" do
-    let(:route) { get :make, params: {}, session: valid_session }
+  describe "GET #perform" do
+    let(:route) { get :perform, params: {}, session: valid_session }
 
     context "when pending reviews" do
       it 'returns a success response' do

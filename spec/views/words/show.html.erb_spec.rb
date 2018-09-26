@@ -4,7 +4,7 @@ RSpec.describe "words/show", type: :view do
   before(:each) do
     @word = assign(:word, create(:word, spelling: "Spelling" ))
     create(:review, word: @word)
-    create(:made_review, word: @word)
+    create(:performed_review, word: @word)
     @review = assign(:review, @word.reviews.new)
     render
   end
