@@ -1,5 +1,4 @@
 class ReviewsController < ApplicationController
-  before_action :first_pending, only: [:perform, :update]
 
   def index
     @reviews = Review.pending
@@ -20,13 +19,19 @@ class ReviewsController < ApplicationController
   end
 
   def perform
+    unless Review.pending.count > 0
+      redirect_to root_path, notice: "There aren't more pending reviews."
+    end
+
+    @review = Review.pending.first
   end
 
   def update
-    passed = params['review']['passed'] == "true" ? true : false
-    @review.perform(passed)
+    @review = Review.pending.find(params[:id])
+    @passed = params['review']['passed'] == "1" ? true : false
+    @review.perform(@passed)
 
-    scheduled_for = if passed
+    scheduled_for = if @passed
       (@review.meantime + @review.previous.meantime).days.from_now
     else
       Date.tomorrow
@@ -39,12 +44,5 @@ class ReviewsController < ApplicationController
   private
   def review_params
     params.require(:review)
-  end
-
-  def first_pending
-    @review = Review.pending.first
-    unless Review.pending.count > 0
-      redirect_to root_path, notice: "There aren't more pending reviews. Well done, continue with hard work."
-    end
   end
 end

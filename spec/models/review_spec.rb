@@ -59,6 +59,7 @@ RSpec.describe Review, type: :model do
 
     it 'defines passed field' do
       expect(performed.passed).to be true
+      expect(create(:pending_review).perform(false).passed).to be false
     end
   end
 end

@@ -15,7 +15,7 @@ RSpec.describe ReviewsController, type: :routing do
     end
 
     it "routes to #update" do
-      expect(:post => "/reviews/perform").to route_to("reviews#update")
+      expect(:patch => "/reviews/1").to route_to("reviews#update", :id => '1')
     end
   end
 end

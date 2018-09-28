@@ -52,29 +52,40 @@ context "when no pending reviews" do
   end
 
   describe "POST #update" do
-    let(:route) { post :update, params: {review: {passed: true}}, session:valid_session }
-
-    context "when pending reviews" do
-      before { $review = create(:pending_review) }
+    let(:review) { $review.reload }
+    before { $review = create(:pending_review) }
+    let(:route) { post :update, params: {id: $review.id, review: {passed: 1}}, session: valid_session }
 
       it "performs a pending review" do
         expect {route}.to change(Review.pending, :count).by(-1)
+        expect(review.performed_at.to_i).to match DateTime.now.to_i
       end
 
       it "creates a new review for the same word" do
-        expect {route}.to change($review.word.reviews, :count).by(1)
+        expect {route}.to change(review.word.reviews, :count).by(1)
       end
 
       context "if the review was passed," do
+        before { route }
+
+        it do
+          expect(review.passed).to be true
+        end
+
         it "creates a new review which has a longer meantime" do
-          route
-          expect(Review.last.meantime).to be > $review.meantime
+          expect(Review.last.meantime).to be > review.meantime
         end
       end
 
       context "if the review was not passed," do
+        before { post :update, params: {id: $review.id, review: {passed: false}}, session: valid_session }
+
+        it do
+          $review.reload
+          expect(review.passed).to be false
+        end
+
         it "creates a review for tomorrow" do
-          post :update, params: {review: {passed: false}}, session:valid_session
           expect(Review.last.scheduled_for).to match Date.tomorrow
         end
       end
@@ -83,13 +94,5 @@ context "when no pending reviews" do
         route
         expect(response).to redirect_to(reviews_perform_path)
       end
-    end
-
-    context "when no pending reviews" do
-      it 'redirects to root' do
-        route
-        expect(response).to redirect_to(root_path)
-      end
-    end
   end
 end

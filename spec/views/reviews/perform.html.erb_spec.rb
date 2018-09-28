@@ -11,7 +11,7 @@ RSpec.describe "reviews/perform", type: :view do
 
     assert_select "p", :text => "purple"
 
-    assert_select "form[action=?][method=?]", reviews_perform_path, "post" do
+    assert_select "form[action=?][method=?]", review_path(@review), "post" do
 
       assert_select "input[name=?]", "review[passed]"
     end

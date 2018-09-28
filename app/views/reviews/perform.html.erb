@@ -2,7 +2,7 @@
 <p>Perform the review as you like. For example: think of the word's meaning or definition, then look for it in a dictionary to check if it is right.</p>
 <p><strong><%= @review.word.spelling %></strong></p>
 
-<%= form_with(scope: :review, url: reviews_perform_path) do |form| %>
+<%= form_with(model: @review, local: true) do |form| %>
   <div class="field">
     <label for="review_passed"><%= form.check_box(:passed) %> pass</label>
   </div>
