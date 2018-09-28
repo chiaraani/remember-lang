@@ -1,11 +1,13 @@
 class ReviewsController < ApplicationController
+  before_action :first_pending, only: [:perform, :update]
+
   def index
     @reviews = Review.pending
   end
 
   def create
     @word = Word.find(params[:word_id])
-    @review = @word.reviews.new(review_params)
+    @review = @word.reviews.new(review_params.permit(:scheduled_for))
 
     respond_to do |format|
       if @review.save
@@ -18,17 +20,31 @@ class ReviewsController < ApplicationController
   end
 
   def perform
-    if Review.pending.count > 0
-      @review = Review.pending.first
+  end
+
+  def update
+    passed = params['review']['passed'] == "true" ? true : false
+    @review.perform(passed)
+
+    scheduled_for = if passed
+      (@review.meantime + @review.previous.meantime).days.from_now
     else
-      respond_to do |format|
-        format.html { redirect_to root_path, notice: 'There are no pending reviews.' }
-      end
+      Date.tomorrow
     end
+    @review.word.reviews.create!(scheduled_for: scheduled_for)
+
+    redirect_to({ action: 'perform' }, notice: "The review was performed successfully. Well done, continue with hard work.")
   end
 
   private
   def review_params
-    params.require(:review).permit(:scheduled_for)
+    params.require(:review)
+  end
+
+  def first_pending
+    @review = Review.pending.first
+    unless Review.pending.count > 0
+      redirect_to root_path, notice: "There aren't more pending reviews. Well done, continue with hard work."
+    end
   end
 end

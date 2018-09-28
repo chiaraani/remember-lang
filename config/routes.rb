@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root 'reviews#index'
 
   get 'reviews/perform'
+  post 'reviews/perform' => 'reviews#update'
 
   resources :words do
     resources :reviews, only: :create

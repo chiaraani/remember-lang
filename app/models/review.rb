@@ -10,10 +10,10 @@ class Review < ApplicationRecord
 
   def previous
     if word.reviews.count > 1
-      word.reviews.where('performed_at <= ?', created_at).last
-    else
-      word.reviews.new(created_at: (created_at - (meantime / 2).round.days), performed_at: created_at, passed: true)
+      r = word.reviews.where('performed_at <= ?', created_at).last
+      return r if r.passed
     end
+    word.reviews.new(created_at: (created_at - (meantime / 2).round.days), performed_at: created_at, passed: true)
   end
 
   def perform(pass)
