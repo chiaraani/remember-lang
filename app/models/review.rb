@@ -15,4 +15,9 @@ class Review < ApplicationRecord
       word.reviews.new(created_at: (created_at - (meantime / 2).round.days), performed_at: created_at, passed: true)
     end
   end
+
+  def perform(pass)
+    update!(performed_at: Time.now, passed: pass)
+    self.reload
+  end
 end

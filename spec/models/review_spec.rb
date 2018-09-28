@@ -26,10 +26,12 @@ RSpec.describe Review, type: :model do
     context 'the review has not been performed' do
       it { expect(review.meantime).to eql(10) }
     end
+
     context 'the review has already been performed' do
       it { expect(performed_review.meantime).to eql(7) }
     end
   end
+
   describe 'previous' do
     context 'finds a previous review' do
       it do
@@ -37,12 +39,26 @@ RSpec.describe Review, type: :model do
         expect(review.previous).to match previous
       end
     end
+
     context 'when no previous review' do
       it 'returns a new review' do
         expect(review.previous.created_at.to_date).to match 5.days.ago.to_date
         expect(review.previous.word).to match word
         expect(review.previous.performed_at.to_date).to match review.created_at.to_date
       end
+    end
+  end
+
+  describe 'perform' do
+    let(:performed) { pending_review.perform(true) }
+
+    it 'saves the time' do
+      Time.zone = 'London'
+      expect(performed.performed_at.to_s(:long)).to match Time.now.to_s(:long)
+    end
+
+    it 'defines passed field' do
+      expect(performed.passed).to be true
     end
   end
 end
