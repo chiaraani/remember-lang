@@ -1,24 +1,27 @@
-# README
+# Installation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Ruby version must be >= 2.3.0
 
-Things you may want to cover:
+Run
+```
+$ git clone git@github.com:chiaraani/remember-lang.git
+$ cd remember-lang
+$ bundle
+$ rails db:migrate
+```
+Ready to use!
 
-* Ruby version
+# Start Application
+```
+$ rails s
+```
+# Usage
+* Create a new word.
+* Add a new review scheduled for tomorrow.
+* Then wait until tomorrow.
+* Do the word's review as you like
+* Check passed whether you remember the word
+* Update the Review.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+If you passed the review, a new review will be created which will be ready to perform in 2 days.
+Otherwise, a new review will be created for tomorrow.
