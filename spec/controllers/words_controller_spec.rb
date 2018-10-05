@@ -82,7 +82,17 @@ RSpec.describe WordsController, type: :controller do
         route
         expect(response).to redirect_to(Word.last)
       end
-    end
+
+      context "with review=true" do
+        it "creates a review" do
+          expect do
+            post :create,
+              params: {word: attributes_for(:word), review: "on"},
+              session: valid_session
+          end.to change(Review, :count).by(1)
+        end
+      end
+   end
 
     context "with invalid params" do
       it "returns a success response (i.e. to display the 'new' template)" do

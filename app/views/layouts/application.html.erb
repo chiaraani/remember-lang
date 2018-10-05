@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Remember</title>
+    <title>Remember Lang</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,7 +10,7 @@
   </head>
 
   <body>
-    <header>Remember Lang 0.1.1</header>
+    <header>Remember Lang <%= Remember::Lang::VERSION %></header>
     <nav>
       <ul>
         <li><%= link_to "Today's Reviews", root_path %></li>

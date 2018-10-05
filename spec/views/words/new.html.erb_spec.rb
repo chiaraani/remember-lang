@@ -11,6 +11,7 @@ RSpec.describe "words/new", type: :view do
     assert_select "form[action=?][method=?]", words_path, "post" do
 
       assert_select "input[name=?]", "word[spelling]"
+      assert_select "input[name=?]", "review"
     end
   end
 end

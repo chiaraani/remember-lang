@@ -16,6 +16,12 @@
     <%= form.text_field :spelling %>
   </div>
 
+<% if local_assigns[:create] %>
+  <div class="field">
+    <label for="review"><%= check_box_tag :review, nil, checked: 1 %> create a review for tomorrow</label>
+  </div>
+<% end %>
+
   <div class="actions">
     <%= form.submit %>
   </div>

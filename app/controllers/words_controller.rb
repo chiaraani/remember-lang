@@ -29,6 +29,7 @@ class WordsController < ApplicationController
 
     respond_to do |format|
       if @word.save
+        @word.reviews.create!(scheduled_for: Date.tomorrow) if params[:review] == "on"
         format.html { redirect_to @word, notice: 'Word was successfully created.' }
         format.json { render :show, status: :created, location: @word }
       else
