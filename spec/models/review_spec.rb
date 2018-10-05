@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Review, type: :model do
   let(:word) { create(:word) }
   let(:review) { create(:review, word: word) }
-  let(:pending_review) { create(:pending_review, word: word) }
+  let(:pending_review) { create(:pending_review) }
   let(:performed_review) { create(:performed_review, word: word) }
 
   it 'belongs to a word' do
@@ -15,9 +15,9 @@ RSpec.describe Review, type: :model do
   end
 
   it 'has a pending group' do
+    performed_review
     ids = [pending_review.id]
     review
-    performed_review
     expect(Review.pending.count).to eql(1)
     expect(Review.pending.ids).to match ids
   end
@@ -61,5 +61,12 @@ RSpec.describe Review, type: :model do
       expect(performed.passed).to be true
       expect(create(:pending_review).perform(false).passed).to be false
     end
+  end
+
+  it 'ensures the last review was performed when a new review is created' do
+    create(:review, word: pending_review.word)
+    pending_review.reload
+    expect(pending_review.performed_at.to_i).to eql(Time.now.to_i)
+    expect(pending_review.passed).to be false
   end
 end
