@@ -20,7 +20,7 @@ class ReviewsController < ApplicationController
 
   def perform
     unless Review.pending.count > 0
-      redirect_to root_path, notice: "There aren't more pending reviews."
+      redirect_to root_path, notice: "There aren't more pending reviews. You passed #{view_context.pluralize(Review.passed_today.count, 'review')}."
     end
 
     @review = Review.pending.first

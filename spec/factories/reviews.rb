@@ -14,7 +14,7 @@ FactoryBot.define do
     word
     created_at { 1.week.ago }
     scheduled_for { 3.days.ago }
-    performed_at { Date.today }
+    performed_at { Time.now }
     passed { true }
   end
 end

@@ -22,6 +22,15 @@ RSpec.describe Review, type: :model do
     expect(Review.pending.ids).to match ids
   end
 
+  it 'has a passed today group' do
+    ids = [performed_review.id]
+    create(:pending_review).perform(false)
+    pending_review
+    review
+    expect(Review.passed_today.count).to eql(1)
+    expect(Review.passed_today.ids).to match ids
+  end
+
   describe 'meantime' do
     context 'the review has not been performed' do
       it { expect(review.meantime).to eql(10) }
