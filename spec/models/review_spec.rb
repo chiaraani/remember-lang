@@ -42,6 +42,7 @@ RSpec.describe Review, type: :model do
   end
 
   describe 'previous' do
+    # Deprecated
     context 'finds a previous review' do
       it do
         previous = performed_review

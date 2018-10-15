@@ -22,6 +22,7 @@ class Review < ApplicationRecord
       return r if r and r.passed
     end
     word.reviews.new(created_at: (created_at - (meantime / 2).round.days), performed_at: created_at, passed: true)
+    # Deprecated
   end
 
   def perform(pass)

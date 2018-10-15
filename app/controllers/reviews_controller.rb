@@ -32,7 +32,7 @@ class ReviewsController < ApplicationController
     @review.perform(@passed)
 
     scheduled_for = if @passed
-      (@review.meantime + @review.previous.meantime).days.from_now
+      (@review.meantime + @review.meantime / 1.618).round.days.from_now
     else
       Date.tomorrow
     end
