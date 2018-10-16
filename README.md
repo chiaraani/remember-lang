@@ -15,6 +15,10 @@ Ready to use!
 ```
 $ rails s
 ```
+Then you can browse throughout Remember Lang at http://localhost:3000/
+
+Ctrl+C to stop the application.
+
 # Usage
 * Create a new word.
 * Add a new review scheduled for tomorrow.
