@@ -2,18 +2,19 @@
 
 * Ruby version must be >= 2.3.0
 
-Run
-```
-$ git clone git@github.com:chiaraani/remember-lang.git
-$ cd remember-lang
-$ bundle
-$ rails db:migrate
+Run on prompt
+```bash
+git clone git@github.com:chiaraani/remember-lang.git
+cd remember-lang
+bundle
+rails db:create RAILS_ENV=production
+rails db:migrate RAILS_ENV=production
 ```
 Ready to use!
 
 # Start Application
-```
-$ rails s
+```bash
+rails s --environment=production
 ```
 Then you can browse throughout Remember Lang at http://localhost:3000/
 
