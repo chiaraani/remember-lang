@@ -1,3 +1,3 @@
 <%= render partial: "reviews/list", locals: {reviews: @reviews} %>
-<%= link_to "Do the pending reviews", reviews_perform_path if @reviews.count > 0 %>
+<%= link_to "Do pending reviews", reviews_perform_path if @reviews.count > 0 %>
 <p><%= pluralize(Review.where(performed_at: nil, scheduled_for: Date.tomorrow).count, 'review') %> scheduled for tomorrow.</p>

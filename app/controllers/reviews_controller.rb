@@ -20,7 +20,7 @@ class ReviewsController < ApplicationController
 
   def perform
     unless Review.pending.count > 0
-      redirect_to root_path, notice: "There aren't more pending reviews. You passed #{Review.passed_today.count} / #{Review.performed_today.count}."
+      redirect_to root_path, notice: "Review was performed successfully. There aren't more pending reviews. You passed #{Review.passed_today.count} / #{Review.performed_today.count}."
     end
 
     @review = Review.pending.first
@@ -38,7 +38,7 @@ class ReviewsController < ApplicationController
     end
     @review.word.reviews.create!(scheduled_for: scheduled_for)
 
-    redirect_to({ action: 'perform' }, notice: "The review was performed successfully. Well done, continue with hard work.")
+    redirect_to({ action: 'perform' }, notice: "Review was performed successfully. If you have time, continue with the next review.")
   end
 
   private
