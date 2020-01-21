@@ -1,6 +1,7 @@
 class ReviewsController < ApplicationController
 
   def index
+    Review.pending.arrange
     @reviews = Review.pending
   end
 
@@ -31,12 +32,7 @@ class ReviewsController < ApplicationController
     @passed = params['review']['passed'] == "1" ? true : false
     @review.perform(@passed)
 
-    scheduled_for = if @passed
-      (@review.meantime * 2).round.days.from_now
-    else
-      Date.tomorrow
-    end
-    @review.word.reviews.create!(scheduled_for: scheduled_for)
+    @review.word.create_next_review
 
     redirect_to({ action: 'perform' }, notice: "Review was performed successfully. If you have time, continue with the next review.")
   end

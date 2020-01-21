@@ -14,7 +14,7 @@ RSpec.describe Review, type: :model do
     expect(Review.create(word: word).errors.messages.count).to eql(1)
   end
 
-  it 'has a pending group' do
+  it 'has a pending scope' do
     performed_review
     ids = [pending_review.id]
     review
@@ -22,7 +22,7 @@ RSpec.describe Review, type: :model do
     expect(Review.pending.ids).to match ids
   end
 
-  it 'has a passed today group' do
+  it 'has a passed today scope' do
     ids = [performed_review.id]
     create(:pending_review).perform(false)
     pending_review
@@ -31,35 +31,23 @@ RSpec.describe Review, type: :model do
     expect(Review.passed_today.ids).to match ids
   end
 
-  describe 'meantime' do
+  it 'has a scope to arrange a group of reviews' do
+    create_list(:review, Remember::MAX_PER_DAY + 1, word: word)
+    expect { Review.arrange }
+    .to change(Review.where(scheduled_for: 10.days.from_now), :count).by -1
+  end
+
+  describe '#waiting time' do
     context 'the review has not been performed' do
-      it { expect(review.meantime).to eql(10) }
+      it { expect(review.waiting_time).to eql(10) }
     end
 
     context 'the review has already been performed' do
-      it { expect(performed_review.meantime).to eql(7) }
+      it { expect(performed_review.waiting_time).to eql(7) }
     end
   end
 
-  describe 'previous' do
-    # Deprecated
-    context 'finds a previous review' do
-      it do
-        previous = performed_review
-        expect(review.previous).to match previous
-      end
-    end
-
-    context 'when no previous review' do
-      it 'returns a new review' do
-        expect(review.previous.created_at.to_date).to match 5.days.ago.to_date
-        expect(review.previous.word).to match word
-        expect(review.previous.performed_at.to_date).to match review.created_at.to_date
-      end
-    end
-  end
-
-  describe 'perform' do
+  describe '#perform' do
     let(:performed) { pending_review.perform(true) }
 
     it 'saves the time' do
@@ -78,5 +66,14 @@ RSpec.describe Review, type: :model do
     pending_review.reload
     expect(pending_review.performed_at.to_i).to eql(Time.now.to_i)
     expect(pending_review.passed).to be false
+  end
+
+  describe '#arrange' do
+    it do
+      create_list(:review, Remember::MAX_PER_DAY, word: word)
+      new_review = build(:review)
+      new_review.arrange(10.days.from_now)
+      expect(new_review.scheduled_for).to eql 11.days.from_now.to_date
+    end
   end
 end

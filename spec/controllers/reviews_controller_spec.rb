@@ -6,6 +6,22 @@ RSpec.describe ReviewsController, type: :controller do
 
   let(:valid_session) { {} }
 
+  describe "GET #perform" do
+    let(:route) { get :index, params: {}, session: valid_session }
+
+    it 'returns a success response' do
+      route
+      expect(response).to be_successful
+    end
+
+    context "when too many pending reviews" do
+      it 'arranges the reviews for some other date' do
+        create_list(:pending_review, Remember::MAX_PER_DAY + 1)
+        expect {route}.to change(Review.pending, :count).by -1
+      end
+    end
+  end
+
   describe "POST #create" do
 
     context "with valid params" do
@@ -43,7 +59,7 @@ RSpec.describe ReviewsController, type: :controller do
         expect(response).to be_successful
       end
     end
-context "when no pending reviews" do
+    context "when no pending reviews" do
       it 'redirects to root' do
         route
         expect(response).to redirect_to(root_path)
@@ -56,43 +72,41 @@ context "when no pending reviews" do
     before { $review = create(:pending_review) }
     let(:route) { post :update, params: {id: $review.id, review: {passed: 1}}, session: valid_session }
 
-      it "performs a pending review" do
-        expect {route}.to change(Review.pending, :count).by(-1)
-        expect(review.performed_at.to_i).to match DateTime.now.to_i
+    it "performs a pending review" do
+      expect {route}.to change(Review.pending, :count).by(-1)
+      expect(review.performed_at.to_i).to match DateTime.now.to_i
+    end
+
+    it "creates a new review for the same word" do
+      expect {route}.to change(review.word.reviews, :count).by(1)
+    end
+
+    context "if the review was passed," do
+      before { route }
+
+      it { expect(review.passed).to be true }
+
+      it "creates a new review which has a longer waiting time" do
+        expect(Review.last.waiting_time).to be > review.waiting_time
+      end
+    end
+
+    context "if the review was not passed," do
+      before { post :update, params: {id: $review.id, review: {passed: false}}, session: valid_session }
+
+      it do
+        $review.reload
+        expect(review.passed).to be false
       end
 
-      it "creates a new review for the same word" do
-        expect {route}.to change(review.word.reviews, :count).by(1)
+      it "creates a review for tomorrow" do
+        expect(Review.last.scheduled_for).to match Date.tomorrow
       end
+    end
 
-      context "if the review was passed," do
-        before { route }
-
-        it do
-          expect(review.passed).to be true
-        end
-
-        it "creates a new review which has a longer meantime" do
-          expect(Review.last.meantime).to be > review.meantime
-        end
-      end
-
-      context "if the review was not passed," do
-        before { post :update, params: {id: $review.id, review: {passed: false}}, session: valid_session }
-
-        it do
-          $review.reload
-          expect(review.passed).to be false
-        end
-
-        it "creates a review for tomorrow" do
-          expect(Review.last.scheduled_for).to match Date.tomorrow
-        end
-      end
-
-      it "redirects to perform" do
-        route
-        expect(response).to redirect_to(reviews_perform_path)
-      end
+    it "redirects to perform" do
+      route
+      expect(response).to redirect_to(reviews_perform_path)
+    end
   end
 end
