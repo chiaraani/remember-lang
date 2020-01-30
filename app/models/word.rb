@@ -4,7 +4,7 @@ class Word < ApplicationRecord
 
   def create_next_review
     review = reviews.build
-    if last_performed_review.passed
+    if last_performed_review and last_performed_review.passed
       review.arrange((last_performed_review.waiting_time * Remember::INCREASE).round.days.from_now)
     else
       review.arrange(Date.tomorrow)

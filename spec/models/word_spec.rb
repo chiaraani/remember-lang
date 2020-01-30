@@ -51,5 +51,12 @@ RSpec.describe Word, type: :model do
         expect(word.reviews.last.scheduled_for).to match Date.tomorrow
       end
     end
+
+    context "if there are no reviews," do
+      it "creates a review for tomorrow" do
+        method
+        expect(word.reviews.last.scheduled_for).to match Date.tomorrow
+      end
+    end
   end
 end
