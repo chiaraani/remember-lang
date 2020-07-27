@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_27_152945) do
+ActiveRecord::Schema.define(version: 2020_07_27_190823) do
 
   create_table "defined_definers", id: false, force: :cascade do |t|
     t.integer "defined_id", null: false
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2020_07_27_152945) do
     t.string "spelling", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "postpone", default: false
     t.index ["spelling"], name: "index_words_on_spelling", unique: true
   end
 

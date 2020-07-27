@@ -1,7 +1,7 @@
 class Review < ApplicationRecord
   validates :scheduled_for, presence: true
   belongs_to :word
-  scope :pending, -> { where("scheduled_for <= ?", Date.today).notperformed }
+  scope :pending, -> { where("scheduled_for <= ?", Date.today).where(performed_at: nil, word: Word.where(postpone: false)) }
   scope :notperformed, -> { where(performed_at: nil) }
   scope :passed, -> { where(passed: true) }
   scope :performed_today, -> { where(performed_at: (Time.now.midnight)..Time.now) }

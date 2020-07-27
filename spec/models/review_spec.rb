@@ -16,6 +16,7 @@ RSpec.describe Review, type: :model do
 
   it 'has a pending scope' do
     performed_review
+    create(:pending_review, word: create(:word, postpone: true))
     ids = [pending_review.id]
     review
     expect(Review.pending.count).to eql(1)
