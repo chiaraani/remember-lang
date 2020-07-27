@@ -27,6 +27,10 @@ class Word < ApplicationRecord
   end
 
   def learned
-    last_performed_review.passed and last_performed_review.waiting_time >= Remember::LEARNED_TIME
+    last_performed_review&.passed and last_performed_review.waiting_time >= Remember::LEARNED_TIME
+  end
+
+  def should_postpone
+    update!(postpone: not(definers.all?(&:learned)))
   end
 end

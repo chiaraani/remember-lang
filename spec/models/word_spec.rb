@@ -73,6 +73,12 @@ RSpec.describe Word, type: :model do
   end
 
   describe '#learned' do
+    context 'if no performed reviews,' do
+      it 'returns false' do
+        expect(word.learned).to be_falsy
+      end
+    end
+
     context 'if last review was not passed,' do
       it 'returns false' do
         create(:performed_review, word: word, passed: false)
@@ -91,6 +97,33 @@ RSpec.describe Word, type: :model do
       it 'returns true' do
         create(:performed_review, word: word, passed: true, created_at: 2.months.ago)
         expect(word.learned).to be_truthy
+      end
+    end
+  end
+
+
+  describe '#should_postpone' do
+    context 'if definers are not learned,' do
+      it 'postpones itself' do
+        word.definers.create(attributes_for :word)
+        word.should_postpone
+        expect(word.reload.postpone).to be_truthy
+      end
+    end
+
+    context 'if definers are learned,' do
+      it 'does not postpone itself' do
+        create(:performed_review, word: word, passed: true, created_at: 2.months.ago)
+        subject = word.defined.create(attributes_for :word)
+        subject.should_postpone
+        expect(subject.reload.postpone).to be_falsy
+      end
+
+      it 'unpostpones itself' do
+        create(:performed_review, word: word, passed: true, created_at: 2.months.ago)
+        subject = word.defined.create(attributes_for :word, postpone: true)
+        subject.should_postpone
+        expect(subject.reload.postpone).to be_falsy
       end
     end
   end
