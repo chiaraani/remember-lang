@@ -20,6 +20,18 @@ RSpec.describe Word, type: :model do
     end
   end
 
+  describe 'defined and definers association' do
+    let(:defined) { word.defined.create(attributes_for :word) }
+    it "has defined words" do
+      expect(word.defined).to include(defined)
+    end
+
+    let(:definer) { word.definers.create(attributes_for :word) }
+    it "has definer words" do
+      expect(word.definers).to include(definer)
+    end
+  end
+
   describe '#last_performed_review' do
     it do
       create(:performed_review, word: word, performed_at: 10.days.ago)

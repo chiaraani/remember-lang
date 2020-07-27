@@ -71,3 +71,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "rack", ">= 2.0.6"
 gem "loofah", ">= 2.2.3"
+
+gem "guard", "~> 2.16"
+
+gem "guard-rspec", "~> 4.7"

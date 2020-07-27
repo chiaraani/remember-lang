@@ -1,4 +1,15 @@
 class Word < ApplicationRecord
+  has_and_belongs_to_many :defined, 
+    class_name: 'Word', 
+    join_table: 'defined_definers', 
+    association_foreign_key: 'defined_id', 
+    foreign_key: 'definer_id'
+  has_and_belongs_to_many :definers, 
+    class_name: 'Word', 
+    join_table: 'defined_definers', 
+    association_foreign_key: 'definer_id', 
+    foreign_key: 'defined_id'
+
   validates :spelling, presence: true, uniqueness: true
   has_many :reviews, dependent: :delete_all
 
