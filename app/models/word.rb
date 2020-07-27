@@ -25,4 +25,8 @@ class Word < ApplicationRecord
   def last_performed_review
      reviews.order(:performed_at).last
   end
+
+  def learned
+    last_performed_review.passed and last_performed_review.waiting_time >= Remember::LEARNED_TIME
+  end
 end

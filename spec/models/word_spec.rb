@@ -71,4 +71,27 @@ RSpec.describe Word, type: :model do
       end
     end
   end
+
+  describe '#learned' do
+    context 'if last review was not passed,' do
+      it 'returns false' do
+        create(:performed_review, word: word, passed: false)
+        expect(word.learned).to be_falsy
+      end
+    end
+
+    context 'if last review was passed and its waiting_time is shorter than learned_time,' do
+      it 'returns false' do
+        create(:performed_review, word: word, passed: true)
+        expect(word.learned).to be_falsy
+      end
+    end
+
+    context 'if last review was passed and its waiting_time is longer than learned_time,' do
+      it 'returns true' do
+        create(:performed_review, word: word, passed: true, created_at: 2.months.ago)
+        expect(word.learned).to be_truthy
+      end
+    end
+  end
 end
