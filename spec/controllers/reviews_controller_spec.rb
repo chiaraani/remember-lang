@@ -68,13 +68,13 @@ RSpec.describe ReviewsController, type: :controller do
   end
 
   describe "POST #update" do
-    let(:review) { $review.reload }
-    before { $review = create(:pending_review) }
-    let(:route) { post :update, params: {id: $review.id, review: {passed: 1}}, session: valid_session }
+    let(:review) { create(:pending_review) }
+    let(:route) { post :update, params: {id: review.id, review: {passed: 1}}, session: valid_session }
 
     it "performs a pending review" do
+      review
       expect {route}.to change(Review.pending, :count).by(-1)
-      expect(review.performed_at.to_i).to match DateTime.now.to_i
+      expect(review.reload.performed_at.to_i).to eq DateTime.now.to_i
     end
 
     it "creates a new review for the same word" do
@@ -84,7 +84,7 @@ RSpec.describe ReviewsController, type: :controller do
     context "if the review was passed," do
       before { route }
 
-      it { expect(review.passed).to be true }
+      it { expect(review.reload.passed).to be true }
 
       it "creates a new review which has a longer waiting time" do
         expect(Review.last.waiting_time).to be > review.waiting_time
@@ -92,15 +92,19 @@ RSpec.describe ReviewsController, type: :controller do
     end
 
     context "if the review was not passed," do
-      before { post :update, params: {id: $review.id, review: {passed: false}}, session: valid_session }
-
-      it do
-        $review.reload
-        expect(review.passed).to be false
+      before do
+        review.word.definers.create(attributes_for :word)
+        post :update, params: {id: review.id, review: {passed: false}}, session: valid_session 
       end
+
+      it { expect(review.reload.passed).to be false }
 
       it "creates a review for tomorrow" do
         expect(Review.last.scheduled_for).to match Date.tomorrow
+      end
+
+      it "executes word's method 'should_postpone'" do
+        expect(review.reload.word.postpone).to be_truthy
       end
     end
 

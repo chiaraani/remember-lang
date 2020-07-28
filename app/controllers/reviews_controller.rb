@@ -33,6 +33,7 @@ class ReviewsController < ApplicationController
     @review.perform(@passed)
 
     @review.word.create_next_review
+    @review.word.should_postpone unless @passed
 
     redirect_to({ action: 'perform' }, notice: "Review was performed successfully. If you have time, continue with the next review.")
   end
