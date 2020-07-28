@@ -4,11 +4,11 @@ RSpec.describe Word, type: :model do
   let(:word) { create(:word) }
   describe 'spelling' do
     it 'must be present' do
-      expect(Word.create(spelling: nil).errors.messages.count).to eql(1)
+      expect(Word.create(spelling: nil).valid?).to be_falsy
     end
     it 'must be unique' do
       create(:word, spelling: 'hello')
-      expect(Word.create(spelling: 'hello').errors.messages.count).to eql(1)
+      expect(Word.create(spelling: 'hello').valid?).to be_falsy
     end
   end
 
@@ -29,6 +29,19 @@ RSpec.describe Word, type: :model do
     let(:definer) { word.definers.create(attributes_for :word) }
     it "has definer words" do
       expect(word.definers).to include(definer)
+    end
+    
+    let(:definers) { definer }
+    it 'invalidates to have same word as defined and definer' do
+      names = [:definers, :defined]
+      names = [names, names.reverse]
+      [proc { |a, b| word.send(a) << send(b) }, 
+       proc { |a, b| word.update(a => word.send(a).to_ary << send(b)) }]
+      .each do |p|
+        names.each do |sym|
+          expect{ p.(sym[0], sym[1]) }.to_not change(word.reload, sym[0])
+        end
+      end
     end
   end
 
