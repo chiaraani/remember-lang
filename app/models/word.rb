@@ -32,5 +32,7 @@ class Word < ApplicationRecord
 
   def should_postpone
     update!(postpone: not(definers.all?(&:learned)))
+    defined.each { |w| w.update!(postpone: true) } if postpone
+    defined.each { |w| w.should_postpone } if learned
   end
 end

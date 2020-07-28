@@ -109,6 +109,13 @@ RSpec.describe Word, type: :model do
         word.should_postpone
         expect(word.reload.postpone).to be_truthy
       end
+
+      it 'postpones words that defines' do
+        word.definers.create(attributes_for :word)
+        subject = word.defined.create(attributes_for :word)
+        word.should_postpone
+        expect(subject.reload.postpone).to be_truthy
+      end
     end
 
     context 'if definers are learned,' do
@@ -123,6 +130,22 @@ RSpec.describe Word, type: :model do
         create(:performed_review, word: word, passed: true, created_at: 2.months.ago)
         subject = word.defined.create(attributes_for :word, postpone: true)
         subject.should_postpone
+        expect(subject.reload.postpone).to be_falsy
+      end
+    end
+
+    context 'when it has no definers,' do
+      it 'does not postpone itself' do
+        word.should_postpone
+        expect(word.reload.postpone).to be_falsy
+      end
+    end
+
+    context 'when it was learned,' do
+      it 'makes its defined words to execute should_postpone' do
+        create(:performed_review, word: word, passed: true, created_at: 2.months.ago)
+        subject = word.defined.create(attributes_for :word, postpone: true)
+        word.should_postpone
         expect(subject.reload.postpone).to be_falsy
       end
     end
