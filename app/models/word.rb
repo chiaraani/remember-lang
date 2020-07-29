@@ -3,46 +3,30 @@ class Word < ApplicationRecord
     class_name: 'Word', 
     join_table: 'defined_definers', 
     association_foreign_key: 'defined_id', 
-    foreign_key: 'definer_id') do
-      def <<(define_another)
-        if proxy_association.owner.definers.include? define_another
-          DefinedDefinersValidator.errors_for(proxy_association.owner)
-          self
-        else
-          super
-        end
-      end
-    end
+    foreign_key: 'definer_id')
   has_and_belongs_to_many(:definers, 
     class_name: 'Word', 
     join_table: 'defined_definers', 
     association_foreign_key: 'definer_id', 
-    foreign_key: 'defined_id') do
-      def <<(new_definer)
-        if proxy_association.owner.defined.include? new_definer
-          DefinedDefinersValidator.errors_for(proxy_association.owner)
-          self
-        else
-          super
-        end
-      end
+    foreign_key: 'defined_id')
+  attr_accessor :new_definer
+  validates_each :new_definer, allow_nil: true, allow_blank: false do |record, attr, value|
+    errors = []
+    if record.new_definer = Word.find_by_spelling(value)
+      errors << 'can NOT define and be defined by the same word' if record.defined.include? record.new_definer
+    else
+      errors << 'is not recorded as a word'
     end
-
-  class DefinedDefinersValidator < ActiveModel::Validator
-    def validate(record)
-      unless (record.definer_ids - record.defined_ids) == record.definer_ids
-        DefinedDefinersValidator.errors_for(record)
-      end
-    end
-
-    def self.errors_for(record)
-      message = 'A word can NOT define and be defined by the same word.'
-      [:definers, :defined].each { |field| record.errors[field] << message }
-    end
+    errors.each { |e| record.errors.add(attr, e) }
   end
 
-  include ActiveModel::Validations
-  validates_with DefinedDefinersValidator
+
+  def add_definer(definer)
+    @new_definer = definer
+    if valid?
+      definers << new_definer
+    end
+  end
 
   validates :spelling, presence: true, uniqueness: true
   has_many :reviews, dependent: :destroy

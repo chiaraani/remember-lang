@@ -30,18 +30,33 @@ RSpec.describe Word, type: :model do
     it "has definer words" do
       expect(word.definers).to include(definer)
     end
-    
-    let(:definers) { definer }
+
     it 'invalidates to have same word as defined and definer' do
-      names = [:definers, :defined]
-      names = [names, names.reverse]
-      [proc { |a, b| word.send(a) << send(b) }, 
-       proc { |a, b| word.update(a => word.send(a).to_ary << send(b)) }]
-      .each do |p|
-        names.each do |sym|
-          expect{ p.(sym[0], sym[1]) }.to_not change(word.reload, sym[0])
-        end
+      expect { word.add_definer defined.spelling }.to_not change(word.reload, :definer_ids)
+      expect(word.add_definer defined.spelling).to be_falsy
+      expect(word.add_definer create(:word).spelling).to be_truthy
+    end
+  
+    describe 'new_definer' do
+      it 'is accessible' do
+        word.new_definer = 'some'
+        expect(word.new_definer).to eq 'some'
       end
+
+      it 'is not blank' do
+        word.new_definer = ''
+        expect(word.invalid?).to be true
+      end
+
+      it 'must be a word spelling' do
+        word.new_definer = 'akldakf'
+        expect(word.invalid?).to be true
+      end
+
+      it 'must not be defined by the same word that is going to define ' do
+        word.new_definer = defined.spelling
+        expect(word.invalid?).to be true
+      end 
     end
   end
 
