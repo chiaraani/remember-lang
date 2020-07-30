@@ -23,9 +23,10 @@ class Word < ApplicationRecord
 
   def add_definer(definer)
     @new_definer = definer
-    if valid?
+    if saved = valid?
       definers << new_definer
     end
+    saved
   end
 
   validates :spelling, presence: true, uniqueness: true

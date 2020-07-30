@@ -140,4 +140,28 @@ RSpec.describe WordsController, type: :controller do
     end
   end
 
+  describe 'POST #add_definer' do
+    context "with valid params" do
+      let(:new_attributes) { {new_definer: 'apple'} }
+      before do
+        create(:word, spelling: 'apple')
+        post :add_definer, params: {id: word.to_param, word: new_attributes}, session: valid_session
+      end
+
+      it "adds the new definer" do
+        word.reload
+        expect(word.definers.pluck(:spelling)).to include('apple')
+      end
+
+      it("redirects to the word") { expect(response).to redirect_to(word) }
+    end
+
+    context "with invalid params" do
+      it "returns a success response (i.e. to display the 'show' template)" do
+        post :add_definer, params: {id: word.to_param, word: {new_definer: ''}}, session: valid_session
+        expect(response).to be_successful
+        expect(response).to render_template('words/show')
+      end
+    end
+  end
 end

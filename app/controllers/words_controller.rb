@@ -1,5 +1,5 @@
 class WordsController < ApplicationController
-  before_action :set_word, only: [:show, :edit, :update, :destroy]
+  before_action :set_word, only: [:show, :edit, :update, :destroy, :add_definer]
 
   # GET /words
   # GET /words.json
@@ -60,6 +60,20 @@ class WordsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to words_url, notice: 'Word was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /words/1/definers
+  def add_definer
+    new_definer = params.require(:word).permit(:new_definer)['new_definer']
+    respond_to do |format|
+      if @word.add_definer(new_definer)
+        format.html { redirect_to @word, notice: "Word is now defined by #{new_definer}." }
+        format.json { render :show, status: :ok, location: @word }
+      else
+        format.html { render :show }
+        format.json { render json: @word.errors, status: :unprocessable_entity }
+      end
     end
   end
 

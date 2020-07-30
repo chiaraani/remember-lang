@@ -31,10 +31,16 @@ RSpec.describe Word, type: :model do
       expect(word.definers).to include(definer)
     end
 
-    it 'invalidates to have same word as defined and definer' do
-      expect { word.add_definer defined.spelling }.to_not change(word.reload, :definer_ids)
-      expect(word.add_definer defined.spelling).to be_falsy
-      expect(word.add_definer create(:word).spelling).to be_truthy
+    describe 'add_definer' do
+      it 'invalidates to have same word as defined and definer' do
+        expect { word.add_definer defined.spelling }.to_not change(word.reload, :definer_ids)
+        expect(word.add_definer defined.spelling).to be false
+        expect(word.add_definer create(:word).spelling).to be true
+      end
+
+      it 'returns false if blank' do
+         expect(word.add_definer '').to be false        
+      end
     end
   
     describe 'new_definer' do
