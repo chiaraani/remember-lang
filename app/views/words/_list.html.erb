@@ -1,0 +1,18 @@
+<table>
+  <thead>
+    <tr>
+      <th>Spelling</th>
+      <th>Next review</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% words.each do |word| %>
+      <tr>
+        <td><%= link_to word.spelling, word %></td>
+        <td><%= next_review(word) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

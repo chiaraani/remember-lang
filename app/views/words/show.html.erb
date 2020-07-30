@@ -1,9 +1,14 @@
 <h1>
   <%= @word.spelling %>
 </h1>
+<%= link_to 'Edit', edit_word_path(@word) %> | 
+<%= link_to 'Destroy', @word, method: :delete, data: { confirm: 'Are you sure?' } %>
 
-<%= link_to 'Edit', edit_word_path(@word) %>
+<h2>Definers</h2>
+<%= render 'list', words: @word.definers %>
 
 <%= render partial: 'reviews/new' %>
 
 <%= render partial: "reviews/list", locals: {reviews: @word.reload.reviews} %>
+
+

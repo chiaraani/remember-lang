@@ -1,23 +1,2 @@
 <h1>Words</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Spelling</th>
-      <th>Next review</th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @words.each do |word| %>
-      <tr>
-        <td><%= link_to word.spelling, word %></td>
-        <td><%= next_review(word) %></td>
-        <td><%= link_to 'Edit', edit_word_path(word) %></td>
-        <td><%= link_to 'Destroy', word, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
+<%= render 'list', words: @words %>
