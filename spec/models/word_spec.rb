@@ -59,6 +59,11 @@ RSpec.describe Word, type: :model do
         expect(word.invalid?).to be true
       end
 
+      it 'must not be its own spelling' do
+        word.new_definer = word.spelling
+        expect(word.invalid?).to be true
+      end
+
       it 'must not be defined by the same word that is going to define ' do
         word.new_definer = defined.spelling
         expect(word.invalid?).to be true
