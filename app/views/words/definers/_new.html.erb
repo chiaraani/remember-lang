@@ -1,4 +1,4 @@
-<%= form_with(model: word, url: definers_word_path(word), local: true, method: :post) do |form| %>
+<%= form_with(model: word, url: word_definers_path(word), local: true, method: :post) do |form| %>
   <% if word.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(word.errors.count, "error") %> prohibited this word from being saved:</h2>

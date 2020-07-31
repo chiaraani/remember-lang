@@ -5,7 +5,7 @@
 <%= link_to 'Destroy', @word, method: :delete, data: { confirm: 'Are you sure?' } %>
 
 <h2>Definers</h2>
-<%= render 'add_definer', word: @word %>
+<%= render 'words/definers/new', word: @word %>
 <%= render 'list', words: @word.definers %>
 
 <%= render partial: 'reviews/new' %>

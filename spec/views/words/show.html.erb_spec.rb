@@ -39,7 +39,7 @@ RSpec.describe "words/show", type: :view do
   it "renders a form to add a definer" do
     render
 
-    assert_select "form[action=?][method=?]", definers_word_path(@word), "post" do
+    assert_select "form[action=?][method=?]", word_definers_path(@word), "post" do
 
       assert_select "input[name=?]", "word[new_definer]"
       assert_select "input[type=submit][value=?]", "Add definer"

@@ -1,0 +1,2 @@
+module Words::DefinersHelper
+end
