@@ -68,7 +68,7 @@ class WordsController < ApplicationController
     new_definer = params.require(:word).permit(:new_definer)['new_definer']
     respond_to do |format|
       if @word.add_definer(new_definer)
-        format.html { redirect_to @word, notice: "Word is now defined by #{new_definer}." }
+        format.html { redirect_to @word, notice: "New definer was successfully added to word." }
         format.json { render :show, status: :ok, location: @word }
       else
         format.html { render :show }

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   resources :words do
     resources :reviews, only: :create
-    post 'definers' => 'words#add_definer', on: :member, as: :add_definer
+    post 'definers' => 'words#add_definer', on: :member
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

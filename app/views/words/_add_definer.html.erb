@@ -1,0 +1,22 @@
+<%= form_with(model: word, url: definers_word_path(word), local: true, method: :post) do |form| %>
+  <% if word.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(word.errors.count, "error") %> prohibited this word from being saved:</h2>
+
+      <ul>
+      <% word.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :new_definer %>
+    <%= form.text_field :new_definer %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Add definer' %>
+  </div>
+<% end %>
