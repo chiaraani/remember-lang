@@ -14,6 +14,7 @@ class Word < ApplicationRecord
     errors = []
     if record.new_definer = Word.find_by_spelling(value)
       errors << 'can NOT define itself' if record.spelling == value
+      errors << 'can NOT define the same word twice' if record.definers.include? record.new_definer
       errors << 'can NOT define and be defined by the same word' if record.defined.include? record.new_definer
     else
       errors << 'is not recorded as a word'

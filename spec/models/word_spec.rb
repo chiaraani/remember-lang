@@ -64,10 +64,15 @@ RSpec.describe Word, type: :model do
         expect(word.invalid?).to be true
       end
 
-      it 'must not be defined by the same word that is going to define ' do
+      it 'must not be defined by the same word that is going to define' do
         word.new_definer = defined.spelling
         expect(word.invalid?).to be true
-      end 
+      end
+
+      it 'does not define the same word twice' do
+        word.new_definer = definer.spelling
+        expect(word.invalid?).to be true
+      end
     end
   end
 
