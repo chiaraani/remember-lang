@@ -1,15 +1,20 @@
 class Words::DefinersController < ApplicationController
   before_action :set_word
 
+  # GET /words/1/definers
+  def index
+    @words = @word.definers
+  end
+
   # POST /words/1/definers
   def create
     new_definer = word_params['new_definer']
     respond_to do |format|
       if @word.add_definer(new_definer)
-        format.html { redirect_to @word, notice: "New definer was successfully added to word." }
-        format.json { render 'words/show', status: :ok, location: @word }
+        format.html { redirect_to word_definers_path(@word), notice: "New definer was successfully added to word." }
+        format.json { render :index, status: :ok, location: @word }
       else
-        format.html { render 'words/show' }
+        format.html { render :index }
         format.json { render json: @word.errors, status: :unprocessable_entity }
       end
     end
@@ -19,7 +24,7 @@ class Words::DefinersController < ApplicationController
   def destroy
     @definer = @word.definers.find(params[:id])
     @word.definers.destroy @definer
-    redirect_to @word, notice: 'Word was successfully deleted as a definer of word.'
+    redirect_to word_definers_path(@word), notice: 'Word was successfully deleted as a definer of word.'
   end
 
   private

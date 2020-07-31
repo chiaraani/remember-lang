@@ -5,6 +5,14 @@ RSpec.describe Words::DefinersController, type: :controller do
   let(:definer) { create(:word) }
   let(:valid_session) { {} }
 
+  describe 'GET #index' do
+    it "returns a success response" do
+      word
+      get :index, params: {word_id: word.to_param}, session: valid_session
+      expect(response).to be_successful
+    end    
+  end
+
   describe 'POST #create' do
     def route new_definer
       post :create,
@@ -20,14 +28,14 @@ RSpec.describe Words::DefinersController, type: :controller do
         expect(word.definers).to include(definer)
       end
 
-      it("redirects to the word") { expect(response).to redirect_to(word) }
+      it("redirects to the word") { expect(response).to redirect_to(word_definers_path(word)) }
     end
 
     context "with invalid params" do
       it "returns a success response (i.e. to display the word 'show' template)" do
         route('')
         expect(response).to be_successful
-        expect(response).to render_template('words/show')
+        expect(response).to render_template('words/definers/index')
       end
     end
   end
@@ -45,7 +53,7 @@ RSpec.describe Words::DefinersController, type: :controller do
 
     it "redirects to the words list" do
       route
-      expect(response).to redirect_to(word)
+      expect(response).to redirect_to(word_definers_path(word))
     end
   end
 end

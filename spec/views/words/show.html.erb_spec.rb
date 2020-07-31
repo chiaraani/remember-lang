@@ -28,21 +28,4 @@ RSpec.describe "words/show", type: :view do
       assert_select "input[value=?]", (Date.tomorrow).to_s
     end
   end
-
-  it "renders a list of its definer words" do
-    render
-    assert_select "h2", text: 'Definers'
-    assert_select "tr>td", :text => "Hi".to_s
-    assert_select "tr>td", :text => "Hello".to_s
-  end
-
-  it "renders a form to add a definer" do
-    render
-
-    assert_select "form[action=?][method=?]", word_definers_path(@word), "post" do
-
-      assert_select "input[name=?]", "word[new_definer]"
-      assert_select "input[type=submit][value=?]", "Add definer"
-    end
-  end
 end

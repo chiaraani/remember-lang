@@ -52,6 +52,7 @@ RSpec.describe "Words", type: :system do
   scenario "Adding definer to word" do
     create(:word, spelling: 'animal')
     visit url_for word
+    click_on 'Definers'
     fill_in 'word[new_definer]', with: 'animal'
     click_on 'Add definer'
     expect(page).to have_text('New definer was successfully added to word')
@@ -62,6 +63,7 @@ RSpec.describe "Words", type: :system do
   scenario "Deleting definer of word" do
     word.definers << create(:word, spelling: 'animal')
     visit url_for word
+    click_on 'Definers'
     click_on 'Define no longer'
     expect(page).to have_text('Word was successfully deleted as a definer of word.')
     expect(page).to have_text('Definers')
