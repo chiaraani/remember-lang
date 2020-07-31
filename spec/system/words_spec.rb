@@ -1,10 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "Words", type: :system do
-  before do
-    driven_by(:rack_test)
-    create(:word, spelling: 'fish')
-  end
+  before { driven_by(:rack_test) }
+  let!(:word) { create(:word, spelling: 'fish') }
 
   scenario "Visiting words" do
     visit root_path
@@ -36,7 +34,7 @@ RSpec.describe "Words", type: :system do
   end
 
   scenario "Editing word" do
-    visit word_path Word.first
+    visit url_for word
     click_on 'Edit'
     fill_in 'word[spelling]', with: 'salmon'
     click_on 'Update Word'
@@ -45,7 +43,7 @@ RSpec.describe "Words", type: :system do
   end
 
   scenario "Destroying word" do
-    visit word_path Word.first
+    visit url_for word
     click_on 'Destroy'
     expect(page).to have_text('successfully destroyed')
     expect(find('h1')).to have_text('Words')
@@ -53,11 +51,20 @@ RSpec.describe "Words", type: :system do
 
   scenario "Adding definer to word" do
     create(:word, spelling: 'animal')
-    visit word_path Word.first
+    visit url_for word
     fill_in 'word[new_definer]', with: 'animal'
     click_on 'Add definer'
     expect(page).to have_text('New definer was successfully added to word')
     expect(page).to have_text('Definers')
     expect(page).to have_text('animal')
+  end
+
+  scenario "Deleting definer of word" do
+    word.definers << create(:word, spelling: 'animal')
+    visit url_for word
+    click_on 'Define no longer'
+    expect(page).to have_text('Word was successfully deleted as a definer of word.')
+    expect(page).to have_text('Definers')
+    expect(page).to_not have_text('animal')
   end
 end

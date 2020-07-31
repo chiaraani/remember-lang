@@ -7,7 +7,7 @@ module WordsHelper
 		elsif word.reviews.notperformed.count == 1
 			'It may be reviewed in ' + pluralize((word.reviews.last.scheduled_for - Date.today).to_i, 'day') + '.'
 		else
-			'There is not a future schedueld review.'
+			'There is not a future scheduled review.'
 		end
 	end
 end

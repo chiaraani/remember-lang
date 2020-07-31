@@ -15,6 +15,13 @@ class Words::DefinersController < ApplicationController
     end
   end
 
+  # DELETE /words/1/definers/2
+  def destroy
+    @definer = @word.definers.find(params[:id])
+    @word.definers.destroy @definer
+    redirect_to @word, notice: 'Word was successfully deleted as a definer of word.'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_word

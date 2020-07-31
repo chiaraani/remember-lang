@@ -3,7 +3,9 @@
     <tr>
       <th>Spelling</th>
       <th>Next review</th>
-      <th colspan="2"></th>
+      <% if local_assigns[:defined] %>
+        <th>Actions</th>
+      <% end %>
     </tr>
   </thead>
 
@@ -12,6 +14,9 @@
       <tr>
         <td><%= link_to word.spelling, word %></td>
         <td><%= next_review(word) %></td>
+        <% if local_assigns[:defined] %>
+          <td><%= link_to 'Define no longer', word_definer_path(defined, word), method: :delete %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

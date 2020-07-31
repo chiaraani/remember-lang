@@ -19,7 +19,7 @@ RSpec.describe WordsHelper, type: :helper do
 
     context 'when no reviews to do either in future or today' do
       it do
-        expect(next_review(create(:word))).to eq 'There is not a future schedueld review.'
+        expect(next_review(create(:word))).to eq 'There is not a future scheduled review.'
       end
     end
 
