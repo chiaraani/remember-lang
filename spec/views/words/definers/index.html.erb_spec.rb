@@ -11,7 +11,7 @@ RSpec.describe "words/definers/index", type: :view do
 
   it "renders a list of its definer words" do
     render
-    assert_select "h2", text: 'Definers'
+    assert_select "h2", text: 'Words that define "Spelling"'
     assert_select "tr>td", :text => "Hi".to_s
     assert_select "tr>td", :text => "Hello".to_s
   end

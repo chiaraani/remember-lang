@@ -30,8 +30,10 @@ RSpec.describe WordsController, type: :controller do
   # adjust the attributes here as well.
 
   let(:invalid_attributes) {
-    {spelling: ''}
+    {spelling: 'apple'}
   }
+
+  before { @double = create :word, spelling: 'apple'}
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -95,10 +97,15 @@ RSpec.describe WordsController, type: :controller do
    end
 
     context "with invalid params" do
+      let(:route) { post :create, params: {word: invalid_attributes}, session: valid_session }
       it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {word: invalid_attributes}, session: valid_session
+        route
         expect(response).to be_successful
         expect(response).to render_template('words/new')
+      end
+
+      it 'creates review for double word' do
+        expect { route }.to change(@double.reviews, :count).by(1)
       end
     end
   end

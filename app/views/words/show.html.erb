@@ -2,7 +2,7 @@
   <%= @word.spelling %>
 </h1>
 <%= link_to 'Edit', edit_word_path(@word) %> | 
-<%= link_to 'Destroy', @word, method: :delete, data: { confirm: 'Are you sure?' } %> <br />
+<%= link_to 'Destroy', @word, method: :delete, data: { confirm: 'Are you sure?' } %> |
 <%= link_to 'Definers', word_definers_path(@word) %>
 
 <%= render partial: 'reviews/new' %>

@@ -33,6 +33,9 @@ class WordsController < ApplicationController
         format.html { redirect_to @word, notice: 'Word was successfully created.' }
         format.json { render :show, status: :created, location: @word }
       else
+        if @word.errors.details[:spelling].find { |e| e[:error] == :taken }
+          Word.find_by_spelling(@word.spelling).create_next_review
+        end
         format.html { render :new }
         format.json { render json: @word.errors, status: :unprocessable_entity }
       end

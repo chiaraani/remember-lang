@@ -56,7 +56,7 @@ RSpec.describe "Words", type: :system do
     fill_in 'word[new_definer]', with: 'animal'
     click_on 'Add definer'
     expect(page).to have_text('New definer was successfully added to word')
-    expect(page).to have_text('Definers')
+    expect(page).to have_text('Words that define "fish"')
     expect(page).to have_text('animal')
   end
 
@@ -66,7 +66,7 @@ RSpec.describe "Words", type: :system do
     click_on 'Definers'
     click_on 'Define no longer'
     expect(page).to have_text('Word was successfully deleted as a definer of word.')
-    expect(page).to have_text('Definers')
+    expect(page).to have_text('Words that define "fish"')
     expect(page).to_not have_text('animal')
   end
 end
