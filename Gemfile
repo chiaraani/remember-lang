@@ -8,7 +8,7 @@ gem 'rails', '~> 5.2.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '>= 3.12.4'
 # Use SCSS for stylesheets
 gem 'sassc-rails'
 # Use Uglifier as compressor for JavaScript assets
@@ -69,9 +69,16 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem "rack", ">= 2.0.6"
-gem "loofah", ">= 2.2.3"
-
 gem "guard", "~> 2.16"
 
 gem "guard-rspec", "~> 4.7"
+
+# To avoid severities
+gem "rack", ">= 2.1.4"
+gem "loofah", ">= 2.2.3"
+gem "activesupport", ">= 5.2.4.3"
+gem "websocket-extensions", ">= 0.1.5"
+gem "actionpack", ">= 5.2.4.3"
+gem "actionview", ">= 5.2.4.3"
+gem "nokogiri", ">= 1.10.8"
+gem "activestorage", ">= 5.2.4.3"
