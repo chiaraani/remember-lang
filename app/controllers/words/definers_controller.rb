@@ -11,6 +11,7 @@ class Words::DefinersController < ApplicationController
     new_definer = word_params['new_definer']
     respond_to do |format|
       if @word.add_definer(new_definer)
+        @word.should_postpone
         format.html { redirect_to word_definers_path(@word), notice: "New definer was successfully added to word." }
         format.json { render :index, status: :ok, location: @word }
       else
@@ -24,6 +25,7 @@ class Words::DefinersController < ApplicationController
   def destroy
     @definer = @word.definers.find(params[:id])
     @word.definers.destroy @definer
+    @word.should_postpone
     redirect_to word_definers_path(@word), notice: 'Word was successfully deleted as a definer of word.'
   end
 

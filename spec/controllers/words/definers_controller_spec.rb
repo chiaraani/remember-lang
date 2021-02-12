@@ -29,6 +29,10 @@ RSpec.describe Words::DefinersController, type: :controller do
       end
 
       it("redirects to the word") { expect(response).to redirect_to(word_definers_path(word)) }
+
+      it "executes word's method 'should_postpone'" do
+        expect(word.reload.postpone).to be_truthy
+      end
     end
 
     context "with invalid params" do
@@ -54,6 +58,12 @@ RSpec.describe Words::DefinersController, type: :controller do
     it "redirects to the words list" do
       route
       expect(response).to redirect_to(word_definers_path(word))
+    end
+
+    it "executes word's method 'should_postpone'" do
+      word.update(postpone: true)
+      route
+      expect(word.reload.postpone).to be false
     end
   end
 end
