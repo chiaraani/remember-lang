@@ -31,6 +31,15 @@ RSpec.describe Word, type: :model do
       expect(word.definers).to include(definer)
     end
 
+    describe "higher_hierarchy?" do
+      it do
+        expect(word.higher_hierarchy?(defined)).to be true
+        higher = defined.defined.create(attributes_for(:word))
+        expect(word.higher_hierarchy?(higher)).to be true
+        expect(word.higher_hierarchy?(definer)).to be false
+      end
+    end
+
     describe 'add_definer' do
       it 'invalidates to have same word as defined and definer' do
         expect { word.add_definer defined.spelling }.to_not change(word.reload, :definer_ids)
@@ -38,40 +47,25 @@ RSpec.describe Word, type: :model do
         expect(word.add_definer create(:word).spelling).to be true
       end
 
-      it 'returns false if blank' do
+      it 'returns false if definer is blank' do
          expect(word.add_definer '').to be false        
       end
-    end
-  
-    describe 'new_definer' do
-      it 'is accessible' do
-        word.new_definer = 'some'
-        expect(word.new_definer).to eq 'some'
+
+      it 'returns false if definer is not word' do
+        expect(word.add_definer 'akldakf').to be false
       end
 
-      it 'is not blank' do
-        word.new_definer = ''
-        expect(word.invalid?).to be true
+      it 'returns false if definer defined itself' do
+        expect(word.add_definer word.spelling).to be false
       end
 
-      it 'must be a word spelling' do
-        word.new_definer = 'akldakf'
-        expect(word.invalid?).to be true
+      it 'returns false if definer is already definer' do
+        expect(word.add_definer definer.spelling).to be false
       end
 
-      it 'must not be its own spelling' do
-        word.new_definer = word.spelling
-        expect(word.invalid?).to be true
-      end
-
-      it 'must not be defined by the same word that is going to define' do
-        word.new_definer = defined.spelling
-        expect(word.invalid?).to be true
-      end
-
-      it 'does not define the same word twice' do
-        word.new_definer = definer.spelling
-        expect(word.invalid?).to be true
+      it 'returns false if definer defined a word with lower hierarchy' do
+        new_definer = defined.defined.create(attributes_for(:word))
+        expect(word.add_definer new_definer.spelling).to be false
       end
     end
   end

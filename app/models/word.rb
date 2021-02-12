@@ -1,4 +1,6 @@
 class Word < ApplicationRecord
+  validates :spelling, presence: true, uniqueness: true
+
   has_and_belongs_to_many(:defined, 
     class_name: 'Word', 
     join_table: 'defined_definers', 
@@ -9,29 +11,22 @@ class Word < ApplicationRecord
     join_table: 'defined_definers', 
     association_foreign_key: 'definer_id', 
     foreign_key: 'defined_id')
-  attr_accessor :new_definer
-  validates_each :new_definer, allow_nil: true, allow_blank: false do |record, attr, value|
-    errors = []
-    if record.new_definer = Word.find_by_spelling(value)
-      errors << 'can NOT define itself' if record.spelling == value
-      errors << 'can NOT define the same word twice' if record.definers.include? record.new_definer
-      errors << 'can NOT define and be defined by the same word' if record.defined.include? record.new_definer
-    else
-      errors << 'is not recorded as a word'
-    end
-    errors.each { |e| record.errors.add(attr, e) }
+
+  def higher_hierarchy?(word, inspected = [])
+    return true if defined.include? word
+    inspected << self
+    to_inspect = defined - inspected
+    to_inspect.any? { |w| w.higher_hierarchy?(word, inspected)  }
   end
 
-
-  def add_definer(definer)
-    @new_definer = definer
-    if saved = valid?
-      definers << new_definer
-    end
-    saved
+  attr_reader :new_definer
+  def add_definer(word_spelling)
+    errors.clear
+    definer_validation(word_spelling)
+    definers << @new_definer if errors.none?
+    errors.none?
   end
 
-  validates :spelling, presence: true, uniqueness: true
   has_many :reviews, dependent: :destroy
 
   def create_next_review
@@ -57,4 +52,20 @@ class Word < ApplicationRecord
     defined.each { |w| w.update!(postpone: true) } if postpone
     defined.each { |w| w.should_postpone } if learned
   end
+
+  private
+    def definer_validation(value)
+      if value.blank?
+        errors.add :new_definer, :blank 
+        return
+      end
+
+      if @new_definer = Word.find_by_spelling(value)
+        errors.add :base, :invalid, message: 'can NOT define itself' if self == @new_definer
+        errors.add :base, :invalid, message: 'can NOT define the same word twice' if definers.include? @new_definer
+        errors.add :base, :invalid, message: 'can NOT define and be defined by the same word' if higher_hierarchy?(@new_definer)
+      else
+        errors.add :new_definer, :invalid, message: 'is not recorded as a word'
+      end
+    end
 end
