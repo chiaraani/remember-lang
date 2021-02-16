@@ -1,6 +1,6 @@
 <h1>Performing reviews</h1>
 <p>Perform the review as you like. For example: think of the word's meaning or definition, then look for it in a dictionary to check if it is right.</p>
-<p><strong><%= @review.word.spelling %></strong></p>
+<p><strong><%= link_to @review.word.spelling, @review.word %></strong></p>
 
 <%= form_with(model: @review, local: true) do |form| %>
   <div class="field">

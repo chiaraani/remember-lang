@@ -9,7 +9,7 @@ RSpec.describe "reviews/perform", type: :view do
   it "renders the perform review form" do
     render
 
-    assert_select "p", :text => "purple"
+    assert_select "a[href=?]", url_for(@review.word), :text => "purple"
 
     assert_select "form[action=?][method=?]", review_path(@review), "post" do
 
