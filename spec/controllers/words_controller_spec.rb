@@ -145,5 +145,13 @@ RSpec.describe WordsController, type: :controller do
       route
       expect(response).to redirect_to(words_url)
     end
+
+    it "calls should_postpone on its defined" do
+      defined1 = word.defined.create(attributes_for(:word, postpone: true))
+      defined2 = word.defined.create(attributes_for(:word, postpone: true))
+      route
+      expect(defined1.reload.postpone).to be false
+      expect(defined2.reload.postpone).to be false
+    end
   end
 end

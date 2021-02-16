@@ -59,7 +59,12 @@ class WordsController < ApplicationController
   # DELETE /words/1
   # DELETE /words/1.json
   def destroy
+    defined_ids = @word.defined.ids
+
     @word.destroy
+
+    Word.where(id: defined_ids).each(&:should_postpone)
+
     respond_to do |format|
       format.html { redirect_to words_url, notice: 'Word was successfully destroyed.' }
       format.json { head :no_content }
